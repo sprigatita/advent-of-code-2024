@@ -33,6 +33,29 @@ int calculateTotalDistance(int *leftList, int *rightList, int numItems) {
     return totalDistance;
 }
 
+int calculateSimilarityScore(int *leftList, int *rightList, int numItems) {
+    int similarityScore = 0;
+
+    int maxVal = 1000000000; 
+    int *frequency = (int *)calloc(maxVal, sizeof(int));
+    if (frequency == NULL) {
+        printf("Errore nell'allocazione della memoria per il calcolo delle frequenze.\n");
+        return -1;
+    }
+
+    for (int i = 0; i < numItems; i++) {
+        frequency[rightList[i]]++;
+    }
+
+    for (int i = 0; i < numItems; i++) {
+        int count = frequency[leftList[i]];
+        similarityScore += leftList[i] * count;
+    }
+
+    free(frequency);
+    return similarityScore;
+}
+
 int main(void) {
     printf("Advent of Code - Day 01 ;)\n");
     FILE *fptr;
@@ -73,6 +96,12 @@ int main(void) {
     //facciamo tutto il calcolo del caso
     int totalDistance = calculateTotalDistance(firstNumbers, secondNumbers, numLines);
     printf("risultato finale: %d\n", totalDistance);
+
+
+    //similarity score
+    int similarityScore = calculateSimilarityScore(firstNumbers, secondNumbers, numLines);
+    printf("Similarity score: %d\n", similarityScore);
+
 
     //liberiamo memoria cosi' C e' contento
     free(firstNumbers);
